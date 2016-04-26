@@ -2,13 +2,8 @@ package allavaliable;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-<<<<<<< HEAD
-import java.sql.*;
-=======
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
->>>>>>> 2b25962005bd624581752c17077d368f5d9057a3
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -32,6 +27,8 @@ public class AllAvaliableServer extends HttpServlet {
 	  {
 	      // Do required initialization
 		  db = new Dbase();
+		  String tp = db.login("testtest", "test");
+		  System.out.println(tp);
 		  
 	  }
        
@@ -52,10 +49,6 @@ public class AllAvaliableServer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
-		String tp = db.login("testtest", "test");
-		response.getOutputStream().println(tp);
-		
 
 		//response.getOutputStream().println("Hurray !!!!!! This Servlet Works");
 		//PrintWriter out = response.getWriter();
