@@ -2,7 +2,8 @@ package allavaliable;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
- 
+import java.sql.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.annotation.WebServlet;
@@ -10,14 +11,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.jmx.snmp.SnmpUnknownSubSystemException;
-
 /**
  * Servlet implementation class AllAvaliableServer
  */
 @WebServlet("/AllAvaliableServer")
 public class AllAvaliableServer extends HttpServlet {
+	
+	
 	private static final long serialVersionUID = 1L;
+	String message;
+	Dbase db;
+	public void init() throws ServletException
+	  {
+	      // Do required initialization
+		  db = new Dbase();
+		  
+	  }
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -32,7 +41,9 @@ public class AllAvaliableServer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getOutputStream().println("Hurray !!!!!! This Servlet Works");
+		String tp = db.login("testtest", "test");
+		response.getOutputStream().println(tp);
+		
 	}
 
 	/**
