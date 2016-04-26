@@ -2,7 +2,13 @@ package allavaliable;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+<<<<<<< HEAD
 import java.sql.*;
+=======
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+>>>>>>> 2b25962005bd624581752c17077d368f5d9057a3
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -19,6 +25,7 @@ public class AllAvaliableServer extends HttpServlet {
 	
 	
 	private static final long serialVersionUID = 1L;
+
 	String message;
 	Dbase db;
 	public void init() throws ServletException
@@ -28,6 +35,10 @@ public class AllAvaliableServer extends HttpServlet {
 		  
 	  }
        
+
+	private StringTokenizer st = new StringTokenizer("this is a test");
+     
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,9 +52,47 @@ public class AllAvaliableServer extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
 		String tp = db.login("testtest", "test");
 		response.getOutputStream().println(tp);
 		
+
+		//response.getOutputStream().println("Hurray !!!!!! This Servlet Works");
+		//PrintWriter out = response.getWriter();
+        //out.println("Hello Android !!!!");
+       
+        try {
+            int length = request.getContentLength();
+            byte[] input = new byte[50];
+            ServletInputStream sin = request.getInputStream();
+            
+            int c, count = 0 ;
+            while ((c = sin.read(input, count, input.length-count)) != -1) {
+                count +=c;
+            }
+            sin.close();
+           
+            String recievedString = new String(input);       
+            
+            System.out.println("doGet:"+recievedString);
+            
+            response.setStatus(HttpServletResponse.SC_OK);
+            OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream());
+ 
+            writer.write("okok");
+            writer.flush();
+            writer.close();
+
+        } catch (IOException e) {
+            try{
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().print(e.getMessage());
+                response.getWriter().close();
+            } catch (IOException ioe) {
+            }
+        } 
+        
+
 	}
 
 	/**
@@ -52,24 +101,26 @@ public class AllAvaliableServer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
+		//PrintWriter out = response.getWriter();
+        //out.println("Hello Android !!!!");
 		try {
             int length = request.getContentLength();
             byte[] input = new byte[length];
             ServletInputStream sin = request.getInputStream();
-            System.out.println(sin);
+            
             int c, count = 0 ;
             while ((c = sin.read(input, count, input.length-count)) != -1) {
                 count +=c;
             }
             sin.close();
- 
-            String recievedString = new String(input);
+           
+            String recievedString = new String(input);  
+            System.out.println("doPost: "+parseData(recievedString,":;").get(0));
+            
             response.setStatus(HttpServletResponse.SC_OK);
             OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream());
  
-            Integer doubledValue = Integer.parseInt(recievedString) * 2;
- 
-            writer.write(doubledValue.toString());
+            writer.write("okok");
             writer.flush();
             writer.close();
 
@@ -82,6 +133,17 @@ public class AllAvaliableServer extends HttpServlet {
             }
         }   
     }
+	
+	protected ArrayList<String> parseData (String input, String delim){
+		ArrayList<String>receivedAppdata = new ArrayList<String>();
+		input.trim();
+		st = new StringTokenizer(input,delim);
+		while(st.hasMoreTokens()){
+			receivedAppdata.add(st.nextToken());
+        }
+		
+		return receivedAppdata;
+	}
 		
 }
 
