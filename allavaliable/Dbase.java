@@ -21,8 +21,8 @@ public class Dbase {
 		
 		      try {
 		    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
-				  preparedStmt.setString (1, "testtest");
-			      preparedStmt.setString (2, "test");
+				  preparedStmt.setString (1, username);
+			      preparedStmt.setString (2, password);
 			      //preparedStmt.setDouble (3, a.getBaseprice());
 			 
 			      // execute the preparedstatement
