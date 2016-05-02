@@ -113,6 +113,332 @@ public class Dbase {
 		return "ERROR";
 	}
 	
+	public String getMail(String username){
+		String query = "SELECT email FROM user where username=\""+username+"\"";
+		ResultSet rs = null;
+		String mail = "";
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		      
+		      try {
+				while (rs.next()) {
+
+						
+						try {
+							mail = rs.getString("email");
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+							
+
+								  }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return mail;
+	}
+	
+	public String getNumber(String username){
+		String query = "SELECT phonenumber FROM user where username=\""+username+"\"";
+		ResultSet rs = null;
+		String number = "";
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		      
+		      try {
+				while (rs.next()) {
+
+						
+						try {
+							number = rs.getString("phonenumber");
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+							
+
+								  }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return number;
+	}
+	
+	public String getPassword(String username){
+		String query = "SELECT password FROM user where username=\""+username+"\"";
+		ResultSet rs = null;
+		String password = "";
+		Statement stmt = null;
+		try {
+			stmt = conn.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		      
+		      try {
+				while (rs.next()) {
+
+						
+						try {
+							password = rs.getString("password");
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+							
+
+								  }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return password;
+	}
+	
+	public void putMail(String username,String mail){
+		String query = "UPDATE user set email=? WHERE username = \""+username+"\"";
+		       
+		
+		   
+		
+		      try {
+		    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+				  preparedStmt.setString (1, mail);
+			      // execute the preparedstatement
+			      preparedStmt.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public void putNumber(String username,String number){
+		String query = "UPDATE user set phonenumber=? WHERE username = \""+username+"\"";
+	       
+		
+		   
+		
+	      try {
+	    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+			  preparedStmt.setString (1, number);
+		      // execute the preparedstatement
+		      preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean bookConferenceRoom(String roomid, String timeslot, String username){
+		String query = "UPDATE conferenceroom set "+ timeslot +"=? WHERE roomid = \""+roomid+"\"";
+	       
+		
+		   
+		
+	      try {
+	    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+			  preparedStmt.setString (1, username);
+		      // execute the preparedstatement
+		      preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public boolean bookSeatStudyRoom(String roomid, String seatid, String timeslot, String username){
+		String query = "UPDATE studyroom set "+ timeslot +"=? WHERE roomid = \""+roomid+"\" AND seatid = \""+seatid+"\"";
+	       
+		
+		   
+		
+	      try {
+	    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+			  preparedStmt.setString (1, username);
+		      // execute the preparedstatement
+		      preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+	public String checkConferenceRoomStatus(String roomid){
+		String query = "SELECT timeslot1,timeslot2,timeslot3,timeslot4 FROM conferenceroom where roomid=\""+roomid+"\"";
+		
+	      // create the mysql insert preparedstatement
+	ResultSet rs = null;
+	String timeslot1 = "";
+	String timeslot2 = "";
+	String timeslot3 = "";
+	String timeslot4 = "";
+	Statement stmt = null;
+	try {
+		stmt = conn.createStatement();
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	try {
+		rs = stmt.executeQuery(query);
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	      
+	      try {
+			while (rs.next()) {
+
+					
+					try {
+						timeslot1 = rs.getString("timeslot1");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					try {
+						timeslot2 = rs.getString("timeslot2");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						timeslot3 = rs.getString("timeslot3");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						timeslot4 = rs.getString("timeslot4");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					
+
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      return roomid + ":timeslot1:" + timeslot1 + ";timeslot2:" + timeslot2 + ";timeslot3:" + timeslot3 +";timeslot4:" + timeslot4;
+	}
+	
+	public String checkStudyRoomStatus(String roomid){
+		String query = "SELECT seatid,timeslot1,timeslot2,timeslot3,timeslot4 FROM studyroom where roomid=\""+roomid+"\"";
+		
+	      // create the mysql insert preparedstatement
+	
+	ResultSet rs = null;
+	String seatid = "";
+	String timeslot1 = "";
+	String timeslot2 = "";
+	String timeslot3 = "";
+	String timeslot4 = "";
+	String response = roomid + ":";
+	Statement stmt = null;
+	try {
+		stmt = conn.createStatement();
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	try {
+		rs = stmt.executeQuery(query);
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	      
+	      try {
+			while (rs.next()) {
+
+				try {
+						seatid= rs.getString("seatid");
+					} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+				
+					try {
+						timeslot1 = rs.getString("timeslot1");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					try {
+						timeslot2 = rs.getString("timeslot2");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						timeslot3 = rs.getString("timeslot3");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						timeslot4 = rs.getString("timeslot4");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+						response = response + seatid +":timeslot1:"+timeslot1 +";timeslot2:" + timeslot2 + ";timeslot3:" + timeslot3 + ":timeslot4:" + timeslot4 + ";\n";
+					
+					
+
+				}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      return response;
+	}
+	
 	
 
 }
