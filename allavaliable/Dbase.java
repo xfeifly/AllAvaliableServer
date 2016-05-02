@@ -438,7 +438,41 @@ public class Dbase {
 		}
 	      return response;
 	}
+	public boolean clearConferenceRoom(){
+		String query = "UPDATE conferenceroom set timeslot1=\"available\",timeslot2=\"available\",timeslot3=\"available\",timeslot4=\"available\" where id<100";
+	       
+		
+		   
+		
+	      try {
+	    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+		      // execute the preparedstatement
+		      preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
 	
+	public boolean clearStudyRoom(){
+		String query = "UPDATE studyroom set timeslot1=\"available\",timeslot2=\"available\",timeslot3=\"available\",timeslot4=\"available\" where id<100";
+	       
+		
+		   
+		
+	      try {
+	    	  PreparedStatement preparedStmt = conn.prepareStatement(query);
+		      // execute the preparedstatement
+		      preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
 	
 
 }
