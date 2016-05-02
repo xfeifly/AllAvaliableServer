@@ -84,7 +84,7 @@ public class AllAvaliableServer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		db = new Dbase();
 		//PrintWriter out = response.getWriter();
         //out.println("Hello Android !!!!");
 		try {
@@ -99,8 +99,8 @@ public class AllAvaliableServer extends HttpServlet {
             sin.close();
            
             String recievedString = new String(input);  
-            System.out.println("The whole received string111: "+recievedString);
-            System.out.println("After parsing, the first one111: "+parseData(recievedString,":;").get(0));
+            System.out.println("The whole received string: "+recievedString);
+            System.out.println("After parsing, the first one: "+parseData(recievedString,":;").get(0));
             OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream());
 
             switch(parseData(recievedString,":;").get(0)){
@@ -116,16 +116,16 @@ public class AllAvaliableServer extends HttpServlet {
             	System.out.println("loginname: " + loginusername);
             	System.out.println("loginpassword: " + loginpassword);
             	System.out.println("going to check in the database");
-            	db = new Dbase();
+            	
       		    String logintp = db.login(loginusername, loginpassword);
       		    System.out.println(logintp);   
 	            response.setStatus(HttpServletResponse.SC_OK);
-	            //OutputStreamWriter loginwriter = new OutputStreamWriter(response.getOutputStream());
-	 
+	            	 
 	            writer.write(logintp);
 	            writer.flush();
 	            writer.close();
 	            break;
+	            
             case "signup":
             	if(parseData(recievedString,":;").size()<5){
             		System.out.println("name or pass is null!");
@@ -133,90 +133,98 @@ public class AllAvaliableServer extends HttpServlet {
             	}
             	String signupusername = parseData(recievedString,":;").get(2);  	
             	String signuppassword = parseData(recievedString,":;").get(4);
-            	System.out.println("signupname111: " + signupusername);
-            	System.out.println("signuppassword111: " + signuppassword);
+            	System.out.println("signupname: " + signupusername);
+            	System.out.println("signuppassword: " + signuppassword);
             	System.out.println("going to store in the database");
-            	db = new Dbase();
             	
       		    db.register(signupusername, signuppassword);
 	            response.setStatus(HttpServletResponse.SC_OK);
-	           // OutputStreamWriter signupwriter = new OutputStreamWriter(response.getOutputStream());
 	            writer.write("signup success!");
 	            writer.flush();
 	            writer.close();
 	            break;
+	            
             case "conferenceroomstatus":
             	String checkcofroomid = parseData(recievedString,":;").get(1);
-            	System.out.println("roomid: " + checkcofroomid);
+            	String conferenceRoom;
+            	System.out.println(checkcofroomid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	            //OutputStreamWriter checkconferenceroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("129a:timeslot1:avaliable;timeslot2:avaliable;timeslot3:Tom;timeslot4:avaliable");
+            	conferenceRoom = db.checkConferenceRoomStatus(checkcofroomid);
+            	System.out.println(conferenceRoom);
+            	writer.write(conferenceRoom);
             	writer.flush();
             	writer.close();
+            	break;
+            	
             case "studyroomstatus":
             	String checkstyroomid = parseData(recievedString,":;").get(1);
-            	System.out.println("roomid: " + checkstyroomid);
+            	String studyroomstatus;
+            	System.out.println("studyroomid: " + checkstyroomid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	            //OutputStreamWriter checkstudyroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("129a:"
-	            		+ "seat1:timeslot1:avaliable;timeslot2:avaliable;timeslot3:Tom;timeslot4:avaliable;"
-	            		+ "seat2:timeslot1:avaliable;timeslot2:avaliable;timeslot3:Tom;timeslot4:avaliable;");
+            	studyroomstatus = db.checkStudyRoomStatus(checkstyroomid);
+            	writer.write(studyroomstatus);
             	writer.flush();
             	writer.close();
+            	break;
+            	
             case"bookroom":
             	String bookroomid = parseData(recievedString,":;").get(1);
-            	System.out.println("roomid: " + bookroomid);
+            	String bookRoomtimeslot = parseData(recievedString,":;").get(2);
+            	String username = parseData(recievedString,":;").get(3);
+            	Boolean bookcofFlag;
+            	System.out.println("bookconfroomid: " + bookroomid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	           // OutputStreamWriter bookroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("ok");
+            	bookcofFlag = db.bookConferenceRoom(bookroomid, bookRoomtimeslot, username);
+            	writer.write(bookcofFlag.toString());
             	writer.flush();
             	writer.close();
+            	break;
+            	
             case"cancelbookroom":
             	String cancelroomid = parseData(recievedString,":;").get(1);
-            	System.out.println("roomid: " + cancelroomid);
+            	String cancelroomtimeslot = parseData(recievedString,":;").get(2);
+            	System.out.println("cancelroomid: " + cancelroomid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	           // OutputStreamWriter bookroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("ok");
+            	Boolean cancelBookConf;
+            	
+            	cancelBookConf = db.bookConferenceRoom(cancelroomid, cancelroomtimeslot, "avaliable");
+            	writer.write(cancelBookConf.toString());
             	writer.flush();
             	writer.close();
+            	break;
+            	
             case"bookseat":
             	String bookseatroomid = parseData(recievedString,":;").get(1);
             	String bookseatid = parseData(recievedString,":;").get(2);
-            	System.out.println("roomid and seatid: " + bookseatroomid+bookseatid);
+            	String bookseattimeslot = parseData(recievedString,":;").get(3);
+            	String bookseatusername = parseData(recievedString,":;").get(4);
+            	Boolean bookseatFlag;
+            	System.out.println("book seat roomid and seatid: " + bookseatroomid+bookseatid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	           // OutputStreamWriter bookroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("ok");
+	           
+            	bookseatFlag = db.bookSeatStudyRoom(bookseatroomid, bookseatid, bookseattimeslot, bookseatusername);
+            	writer.write(bookseatFlag.toString());
             	writer.flush();
             	writer.close();
+            	break;
+            	
             case"cancelbookseat":
             	String cancleseatroomid = parseData(recievedString,":;").get(1);
             	String cancleseatid = parseData(recievedString,":;").get(2);
+            	String cancleseatTimeslot = parseData(recievedString,":;").get(3);
+            	String cancleseatUsername = parseData(recievedString,":;").get(4);
+            	Boolean cancelseatFlag;
+            	cancelseatFlag = db.bookSeatStudyRoom(cancleseatroomid, cancleseatid, cancleseatTimeslot, "avaliable");
             	System.out.println("roomid and seatid: " + cancleseatroomid+cancleseatid);
             	response.setStatus(HttpServletResponse.SC_OK);
-	           // OutputStreamWriter bookroomwriter = new OutputStreamWriter(response.getOutputStream());
-            	writer.write("ok");
+            	
+            	writer.write(cancelseatFlag.toString());
             	writer.flush();
             	writer.close();
+            	break;
                       
             }
-            
-//            if(parseData(recievedString,":;").get(0).equals("login")){
-//            	String username = parseData(recievedString,":;").get(2);  	
-//            	String password = parseData(recievedString,":;").get(4);
-//            	System.out.println("name: " + username);
-//            	System.out.println("password: " + password);
-//            	System.out.println("going to check in the database");
-//            	db = new Dbase();
-//      		    String tp = db.login(username, password);
-//      		    System.out.println(tp);   
-//	            response.setStatus(HttpServletResponse.SC_OK);
-//	            OutputStreamWriter writer = new OutputStreamWriter(response.getOutputStream());
-//	 
-//	            writer.write(tp);
-//	            writer.flush();
-//	            writer.close();
-//            }
-            
+                     
 
         } catch (IOException e) {
             try{
@@ -233,7 +241,7 @@ public class AllAvaliableServer extends HttpServlet {
 		input.trim();
 		st = new StringTokenizer(input,delim);
 		while(st.hasMoreTokens()){
-			receivedAppdata.add(st.nextToken());
+			receivedAppdata.add(st.nextToken().trim());
         }
 		
 		return receivedAppdata;
